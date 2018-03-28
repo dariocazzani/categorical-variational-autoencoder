@@ -48,6 +48,7 @@ class Network(object):
             self.logits_y = self.encoder(self.x, False)
             self.q_y = tf.nn.softmax(self.logits_y)
             self.log_q_y = tf.log(self.q_y + 1e-20)
+            self.binary_encoding = gumbel_softmax(self.logits_y, self.tau, hard=True)
 
         with tf.variable_scope("Decoder") as scope:
             self.y = tf.reshape(gumbel_softmax(self.logits_y, self.tau, hard=False),[-1, self.N, self.K])
